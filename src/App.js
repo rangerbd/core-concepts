@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
 
 function App() {
     var person= {
@@ -10,7 +11,7 @@ var style={
     color :'red',
 }
 
-var persons=['asd','wer','ghj']
+var persons=['asd','wer','ghj','eee','hhh','ttt','kkk'];
 
 
 var product=[
@@ -19,9 +20,14 @@ var product=[
     {name: 'pdf reader',price:'$580'},
     {name: 'pwindowsp',price:'$90'},
     {name: 'python',price:'$790'}
-
-
 ]
+ 
+    // const productNames=product.map(pd => pd.name);
+    // console.log(productNames);
+
+
+    // const personNames = persons.map(pn => pn);
+    // console.log(personNames);
     return(
 
        <div className='App'>
@@ -29,11 +35,28 @@ var product=[
            <h1>my heading:{person.name} {2+3}</h1>
 
            <p style={{color:'red',backgroundColor:'yellow'}}>this is the paragraph of {person.job}</p>
-
-
-            <Products name={product[0].name} price={product[0].price}></Products>
-            <Products name={product[1].name} price={product[1].price}></Products>
-            <Products name={product[2].name} price={product[2].price}></Products>
+        <Counter></Counter>
+        <Users></Users>
+           <ul>
+               
+               {
+                    persons.map(pn =><li>{pn}</li>)
+                }
+              
+             </ul>
+                
+               <div>
+               {
+                   product.map(pd => <Products product={pd.name} price={pd.price}> </Products>)
+                   
+               }
+               </div>
+               
+               
+            
+            {/* <Products product={product[0].name} price={product[0].price}></Products>
+            <Products product={product[1].name} price={product[1].price}></Products>
+            <Products product={product[2].name} price={product[2].price}></Products> */}
 
             <Person name={persons[0]} ></Person>
             <Person name={persons[1]}></Person>
@@ -45,6 +68,43 @@ var product=[
 
     );
     
+}
+
+function Users(){
+    const [users,setUsers] = useState([]);
+    useEffect(() => {
+        fetch('https://jsonplaceholder.typicode.com/users')
+        .then(res => res.json())
+        .then(data => setUsers(data));
+    })
+
+    return(
+        <div>
+            <h3> dynamic users : {users.length}</h3>
+            <ul> 
+               {
+
+                   users.map(uf => <li>{uf.name}</li>)
+
+               }
+               </ul>
+        </div>
+    )
+}
+
+function Counter(){
+     const [count ,setCount] =useState(0);
+     const handleIncrease = () =>setCount(count + 1); 
+     const handleDecrease = () =>setCount(count - 1);
+        
+     return(
+         <div>
+             <h1> Count : {count}</h1>
+             <button onClick={handleDecrease}>Decrease</button>
+             <button onClick={handleIncrease}>Increase</button>
+
+         </div>
+     )
 }
 
 function Products(props){
@@ -60,7 +120,7 @@ function Products(props){
     }
     return(
         <div style={productStyle}>
-            <h3>{props.name} </h3>
+            <h3>{props.product} </h3>
             <h5>{props.price}</h5>
             <button>Buy Now</button>
         </div>
